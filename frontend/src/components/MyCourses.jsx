@@ -57,7 +57,11 @@ const StudentDashboard = () => {
   return (
     <>
       {/* NavBar */}
-      <AppBar position="static" color="primary" sx={{ boxShadow: 3 }}>
+      <AppBar
+        position="static"
+        color="primary"
+        sx={{ boxShadow: 3, minHeight: 60 }}
+      >
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             Edu Nova
@@ -206,7 +210,11 @@ const StudentDashboard = () => {
                 <CardMedia
                   component="img"
                   height="160"
-                  image={course.image}
+                  image={
+                    course.image?.startsWith("/uploads/")
+                      ? `http://localhost:5000${course.image}`
+                      : course.image
+                  }
                   alt={course.name}
                   sx={{
                     borderTopLeftRadius: 16,
@@ -274,8 +282,8 @@ const StudentDashboard = () => {
         component="footer"
         sx={{
           mt: 8,
-          py: 3,
-          bgcolor: "#3f51b5",
+          py: 1,
+          bgcolor: "primary.main",
           color: "#fff",
           textAlign: "center",
         }}

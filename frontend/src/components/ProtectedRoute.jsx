@@ -5,7 +5,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const role = localStorage.getItem("role");
 
   // If token or role is not present, redirect to login
-  if (!token || !role) {
+  if (!token) {
     return <Navigate to="/login" replace />;
   }
 

@@ -298,7 +298,7 @@ const InstructorDashboard = () => {
           </span>{" "}
           All Courses
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
           <Button
             variant="contained"
             color="primary"
@@ -318,9 +318,9 @@ const InstructorDashboard = () => {
             Add Course
           </Button>
         </Box>
-        <Grid container spacing={4} sx={{ mt: 4 }}>
+        <Grid container spacing={12} sx={{ mt: 6, justifyContent: "center" }}>
           {filtered.map((course) => (
-            <Grid item xs={12} sm={6} md={5} key={course._id}>
+            <Grid item xs={12} sm={6} md={4} key={course._id}>
               <Card
                 sx={{
                   height: "100%",

@@ -54,7 +54,11 @@ const CourseDetails = () => {
   return (
     <>
       {/* NavBar */}
-      <AppBar position="static" color="primary" sx={{ boxShadow: 3 }}>
+      <AppBar
+        position="static"
+        color="primary"
+        sx={{ boxShadow: 3, minHeight: 60 }}
+      >
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             Edu Nova
@@ -146,8 +150,8 @@ const CourseDetails = () => {
         component="footer"
         sx={{
           mt: 8,
-          py: 3,
-          bgcolor: "#3f51b5",
+          py: 1,
+          bgcolor: "primary.main",
           color: "#fff",
           textAlign: "center",
         }}
