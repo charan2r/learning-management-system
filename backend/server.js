@@ -8,7 +8,13 @@ const chatRoutes = require("./routes/chat");
 const path = require("path");
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://learning-management-system-one-green.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/chat", chatRoutes);
