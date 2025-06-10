@@ -96,7 +96,15 @@ npm run dev
 2. Course
   - Include course details, instructor ID, and enrolled student IDs as foreign keys.
 
+---
 
+## 🤖 Chat Assistant Features
+
+### **Personalized Course Recommendations**
+- Show related courses according to user inputs.
+- Ex: "Hi, can you show me courses for software engineering?", "Are there any courses for web development?"
+
+---
 
 
 Built with ❤️ using MERN Stack.
