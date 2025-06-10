@@ -35,7 +35,6 @@ const StudentDashboard = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [filtered, setFiltered] = useState([]);
-  const [search, setSearch] = useState("");
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [tab, setTab] = useState(0);
@@ -55,7 +54,7 @@ const StudentDashboard = () => {
   const fetchCourses = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/course/student/courses",
+        "https://adequate-charm-production-add0.up.railway.app/course/student/courses",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -75,15 +74,6 @@ const StudentDashboard = () => {
     localStorage.clear();
     navigate("/login");
   };
-
-  /*const handleSearch = (e) => {
-    const value = e.target.value.toLowerCase();
-    setSearch(value);
-    const filteredCourses = courses.filter((course) =>
-      course.title.toLowerCase().includes(value)
-    );
-    setFiltered(filteredCourses);
-  };*/
 
   const openEnrollDialog = (course) => {
     setSelectedCourse(course);
