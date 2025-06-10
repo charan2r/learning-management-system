@@ -97,6 +97,6 @@ npm run dev
   - Include course details, instructor ID, and enrolled student IDs as foreign keys.
 
 
-````
+
 
 Built with ❤️ using MERN Stack.
