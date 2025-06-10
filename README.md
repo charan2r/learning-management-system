@@ -99,7 +99,4 @@ npm run dev
 ```
 
 
-
----
-
 Built with ❤️ using MERN Stack.
