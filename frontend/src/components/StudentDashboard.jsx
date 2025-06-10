@@ -386,7 +386,7 @@ const StudentDashboard = () => {
                   height="160"
                   image={
                     course.image?.startsWith("/uploads/")
-                      ? `https://adequate-charm-production-add0.up.railway.app/${course.image}`
+                      ? `https://adequate-charm-production-add0.up.railway.app${course.image}`
                       : course.image
                   }
                   alt={course.name}
