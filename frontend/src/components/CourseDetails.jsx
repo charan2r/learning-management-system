@@ -113,7 +113,11 @@ const CourseDetails = () => {
             {filtered[0].image && (
               <Box sx={{ mb: 3, textAlign: "center" }}>
                 <img
-                  src={filtered[0].image}
+                  src={
+                    filtered[0].image?.startsWith("/uploads/")
+                      ? `http://localhost:5000${filtered[0].image}`
+                      : filtered[0].image
+                  }
                   alt={filtered[0].name}
                   style={{
                     maxWidth: "100%",

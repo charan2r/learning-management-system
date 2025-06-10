@@ -350,9 +350,12 @@ const InstructorDashboard = () => {
                   }
                   alt={course.name}
                   sx={{
+                    width: "100%",
+                    height: 250,
+                    objectFit: "cover",
                     borderTopLeftRadius: 16,
                     borderTopRightRadius: 16,
-                    objectFit: "cover",
+                    aspectRatio: "16/9",
                   }}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
