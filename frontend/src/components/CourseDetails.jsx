@@ -29,7 +29,7 @@ const CourseDetails = () => {
   const fetchCourses = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/course/student/courses/${id}`,
+        `https://adequate-charm-production-add0.up.railway.app/course/student/courses/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -115,7 +115,7 @@ const CourseDetails = () => {
                 <img
                   src={
                     filtered[0].image?.startsWith("/uploads/")
-                      ? `http://localhost:5000${filtered[0].image}`
+                      ? `https://adequate-charm-production-add0.up.railway.app${filtered[0].image}`
                       : filtered[0].image
                   }
                   alt={filtered[0].name}

@@ -28,9 +28,12 @@ const CourseStudents = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/course/instructor/courses/${id}/students`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(
+        `https://adequate-charm-production-add0.up.railway.app/course/instructor/courses/${id}/students`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((res) => setStudents(res.data))
       .catch(() => setStudents([]));
   }, [id]);

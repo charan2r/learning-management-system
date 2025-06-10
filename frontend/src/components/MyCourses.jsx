@@ -32,7 +32,7 @@ const StudentDashboard = () => {
   const fetchCourses = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/course/student/courses/enrolled",
+        "https://adequate-charm-production-add0.up.railway.app/course/student/courses/enrolled",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -212,7 +212,7 @@ const StudentDashboard = () => {
                   height="160"
                   image={
                     course.image?.startsWith("/uploads/")
-                      ? `http://localhost:5000${course.image}`
+                      ? `https://adequate-charm-production-add0.up.railway.app${course.image}`
                       : course.image
                   }
                   alt={course.name}

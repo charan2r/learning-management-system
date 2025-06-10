@@ -75,7 +75,10 @@ const Register = () => {
     }
     setErrors({});
     try {
-      await axios.post("http://localhost:5000/auth/register", form);
+      await axios.post(
+        "https://adequate-charm-production-add0.up.railway.app/auth/register",
+        form
+      );
       setAlert({
         open: true,
         message: "Registered successfully!",

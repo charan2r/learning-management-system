@@ -55,7 +55,7 @@ const InstructorDashboard = () => {
   const fetchCourses = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/course/instructor/courses",
+        "https://adequate-charm-production-add0.up.railway.app/course/instructor/courses",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -111,7 +111,7 @@ const InstructorDashboard = () => {
   const handleEdit = async () => {
     try {
       await axios.put(
-        `http://localhost:5000/course/instructor/update/${selectedCourse._id}`,
+        `https://adequate-charm-production-add0.up.railway.app/course/instructor/update/${selectedCourse._id}`,
         editForm,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -128,7 +128,7 @@ const InstructorDashboard = () => {
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `http://localhost:5000/course/instructor/delete/${selectedCourse._id}`,
+        `https://adequate-charm-production-add0.up.railway.app/course/instructor/delete/${selectedCourse._id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       alert("Course deleted successfully");
@@ -157,7 +157,7 @@ const InstructorDashboard = () => {
       if (addImage) formData.append("image", addImage);
 
       await axios.post(
-        "http://localhost:5000/course/instructor/add",
+        "https://adequate-charm-production-add0.up.railway.app/course/instructor/add",
         formData,
         {
           headers: {
@@ -345,7 +345,7 @@ const InstructorDashboard = () => {
                   height="160"
                   image={
                     course.image?.startsWith("/uploads/")
-                      ? `http://localhost:5000${course.image}`
+                      ? `https://adequate-charm-production-add0.up.railway.app${course.image}`
                       : course.image
                   }
                   alt={course.name}

@@ -84,7 +84,7 @@ const StudentDashboard = () => {
   const handleEnroll = async () => {
     try {
       await axios.post(
-        `http://localhost:5000/course/student/courses/${selectedCourse._id}/enroll`,
+        `https://adequate-charm-production-add0.up.railway.app/course/student/courses/${selectedCourse._id}/enroll`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -108,7 +108,7 @@ const StudentDashboard = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/chat/recommendations",
+        "https://adequate-charm-production-add0.up.railway.app/chat/recommendations",
         { input: userInput },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -386,7 +386,7 @@ const StudentDashboard = () => {
                   height="160"
                   image={
                     course.image?.startsWith("/uploads/")
-                      ? `http://localhost:5000${course.image}`
+                      ? `https://adequate-charm-production-add0.up.railway.app/${course.image}`
                       : course.image
                   }
                   alt={course.name}
