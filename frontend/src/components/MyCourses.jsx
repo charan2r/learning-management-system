@@ -103,7 +103,7 @@ const StudentDashboard = () => {
         }}
       >
         <img
-          src="https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1200&q=80"
+          src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=80"
           alt="Hero"
           style={{
             width: "100%",

@@ -5,6 +5,7 @@ require("dotenv").config();
 const authRoutes = require("./routes/auth");
 const courseRoutes = require("./routes/course");
 const chatRoutes = require("./routes/chat");
+const path = require("path");
 
 const app = express();
 app.use(cors());
@@ -12,6 +13,8 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/chat", chatRoutes);
 app.use("/course", courseRoutes);
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Starting server
 app.listen(5000, () => {

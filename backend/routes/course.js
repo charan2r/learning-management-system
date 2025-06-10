@@ -2,6 +2,11 @@ const express = require("express");
 const Course = require("../models/Course");
 const middleware = require("../middleware/authMiddleware");
 const router = express.Router();
+const multer = require("multer");
+
+const upload = multer({
+  dest: "uploads/",
+});
 
 // Students - view all courses
 router.get("/student/courses", middleware, async (req, res) => {
@@ -65,27 +70,33 @@ router.post("/student/courses/:id/enroll", middleware, async (req, res) => {
 });
 
 // Instructors - create a course
-router.post("/instructor/add", middleware, async (req, res) => {
-  try {
-    if (req.user.role !== "instructor") {
-      return res.status(403).json({ message: "Access denied" });
+router.post(
+  "/instructor/add",
+  middleware,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      if (req.user.role !== "instructor") {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      const { name, description, content } = req.body;
+      const image = req.file ? `/uploads/${req.file.filename}` : null;
+      const add_course = new Course({
+        name,
+        image,
+        description,
+        content,
+        instructor: req.user.id,
+      });
+      await add_course.save();
+      res
+        .status(201)
+        .json({ message: "Course created successfully", course: add_course });
+    } catch (error) {
+      res.status(500).json({ message: "Error creating course", error });
     }
-    const { name, image, description, content } = req.body;
-    const add_course = new Course({
-      name,
-      image,
-      description,
-      content,
-      instructor: req.user.id,
-    });
-    await add_course.save();
-    res
-      .status(201)
-      .json({ message: "Course created successfully", course: add_course });
-  } catch (error) {
-    res.status(500).json({ message: "Error creating course", error });
   }
-});
+);
 
 //Instructors - view all courses
 router.get("/instructor/courses", middleware, async (req, res) => {
@@ -134,7 +145,10 @@ router.get("/instructor/courses/:id/students", middleware, async (req, res) => {
     if (!course) {
       return res.status(404).json({ message: "Course not found" });
     }
-    res.status(200).json(course.students);
+    const filteredStudents = course.students.filter(
+      (student) => student._id.toString() !== course.instructor.toString()
+    );
+    res.status(200).json(filteredStudents);
   } catch (error) {
     res
       .status(500)

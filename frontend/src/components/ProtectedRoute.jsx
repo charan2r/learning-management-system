@@ -9,9 +9,9 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     return <Navigate to="/login" replace />;
   }
 
-  //  redirect to correct dashboard based on role
+  // If role is not in allowedRoles, redirect to login
   if (!allowedRoles.includes(role)) {
-    return <Navigate to={`/${role}`} replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return children;

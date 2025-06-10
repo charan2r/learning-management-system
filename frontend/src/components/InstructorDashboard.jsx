@@ -18,13 +18,11 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Slide,
   IconButton,
   Tabs,
   Tab,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import SchoolIcon from "@mui/icons-material/School";
 import LogoutIcon from "@mui/icons-material/Logout";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -34,11 +32,26 @@ const InstructorDashboard = () => {
   const [courses, setCourses] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [addForm, setAddForm] = useState({
+    name: "",
+    description: "",
+    content: "",
+    image: "",
+  });
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    description: "",
+    content: "",
+  });
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [tab, setTab] = useState(0);
+  const [addImage, setAddImage] = useState(null);
 
   const token = localStorage.getItem("token");
 
+  // fetch courses from the backend
   const fetchCourses = async () => {
     try {
       const res = await axios.get(
@@ -58,36 +71,118 @@ const InstructorDashboard = () => {
     fetchCourses();
   }, []);
 
+  // logout
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
   };
 
-  const openEnrollDialog = (course) => {
-    setSelectedCourse(course);
-    setDialogOpen(true);
+  const handleImage = (e) => {
+    setAddImage(e.target.files[0]);
   };
 
-  const handleEnroll = async () => {
+  {
+    /* opening dialogs */
+  }
+  const openEditDialog = (course) => {
+    setSelectedCourse(course);
+    setEditForm({
+      name: course.name,
+      description: course.description,
+      content: course.content,
+    });
+    setEditDialogOpen(true);
+  };
+
+  const openDeleteDialog = (course) => {
+    setSelectedCourse(course);
+    setDeleteDialogOpen(true);
+  };
+
+  // handle edit form
+  const handleEditChange = (e) => {
+    setEditForm({
+      ...editForm,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // handle edit course
+  const handleEdit = async () => {
     try {
-      await axios.post(
-        `http://localhost:5000/course/student/courses/${selectedCourse._id}/enroll`,
-        {},
+      await axios.put(
+        `http://localhost:5000/course/instructor/update/${selectedCourse._id}`,
+        editForm,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      alert("Enrolled successfully");
+      alert("Course updated successfully");
       fetchCourses();
     } catch (err) {
-      alert(err.response?.data?.message || "Enrollment failed");
+      alert(err.response?.data?.message || "Update failed");
     } finally {
-      setDialogOpen(false);
+      setEditDialogOpen(false);
+    }
+  };
+
+  // handle delete course
+  const handleDelete = async () => {
+    try {
+      await axios.delete(
+        `http://localhost:5000/course/instructor/delete/${selectedCourse._id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert("Course deleted successfully");
+      fetchCourses();
+    } catch (err) {
+      alert(err.response?.data?.message || "Deletion failed");
+    } finally {
+      setDeleteDialogOpen(false);
+    }
+  };
+
+  const handleAddChange = (e) => {
+    setAddForm({
+      ...addForm,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // handle add course
+  const handleAdd = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("name", addForm.name);
+      formData.append("description", addForm.description);
+      formData.append("content", addForm.content);
+      if (addImage) formData.append("image", addImage);
+
+      await axios.post(
+        "http://localhost:5000/course/instructor/add",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setAddDialogOpen(false);
+      setAddForm({ name: "", description: "", content: "" });
+      setAddImage(null);
+      fetchCourses();
+    } catch (err) {
+      alert(err.response?.data?.message || "Error adding course");
     }
   };
 
   return (
     <>
       {/* NavBar */}
-      <AppBar position="static" color="primary" sx={{ boxShadow: 3 }}>
+      <AppBar
+        position="static"
+        color="primary"
+        sx={{ boxShadow: 3, maxHeight: 60 }}
+      >
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             Edu Nova
@@ -102,12 +197,6 @@ const InstructorDashboard = () => {
               iconPosition="start"
               label="Home"
               sx={{ minWidth: 100 }}
-            />
-            <Tab
-              icon={<SchoolIcon />}
-              iconPosition="start"
-              label="My Students"
-              sx={{ minWidth: 120 }}
             />
           </Tabs>
           <IconButton color="inherit" onClick={handleLogout} title="Logout">
@@ -131,7 +220,7 @@ const InstructorDashboard = () => {
         }}
       >
         <img
-          src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=1200&q=80"
+          src="https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1200&q=80"
           alt="Hero"
           style={{
             width: "100%",
@@ -209,9 +298,29 @@ const InstructorDashboard = () => {
           </span>{" "}
           All Courses
         </Typography>
-        <Grid container spacing={4}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              borderRadius: 2,
+              fontWeight: "bold",
+              textTransform: "none",
+              px: 3,
+              py: 1,
+              fontSize: "1rem",
+              boxShadow: "0 2px 8px 0 rgba(91,110,225,0.13)",
+            }}
+            onClick={() => {
+              setAddDialogOpen(true);
+            }}
+          >
+            Add Course
+          </Button>
+        </Box>
+        <Grid container spacing={4} sx={{ mt: 4 }}>
           {filtered.map((course) => (
-            <Grid item xs={12} sm={6} md={4} key={course._id}>
+            <Grid item xs={12} sm={6} md={5} key={course._id}>
               <Card
                 sx={{
                   height: "100%",
@@ -234,7 +343,11 @@ const InstructorDashboard = () => {
                 <CardMedia
                   component="img"
                   height="160"
-                  image={course.image}
+                  image={
+                    course.image?.startsWith("/uploads/")
+                      ? `http://localhost:5000${course.image}`
+                      : course.image
+                  }
                   alt={course.name}
                   sx={{
                     borderTopLeftRadius: 16,
@@ -303,9 +416,25 @@ const InstructorDashboard = () => {
                       py: 1,
                       fontSize: "1rem",
                     }}
+                    onClick={() =>
+                      navigate(`/instructor/my-students/${course._id}`)
+                    }
+                  >
+                    View Students
+                  </Button>
+                  <Button
+                    size="medium"
+                    variant="outlined"
+                    sx={{
+                      borderRadius: 2,
+                      fontWeight: "bold",
+                      textTransform: "none",
+                      px: 3,
+                      py: 1,
+                      fontSize: "1rem",
+                    }}
                     onClick={() => {
-                      // Replace with your details logic, e.g., open a dialog or navigate
-                      alert(`Course details for: ${course.name}`);
+                      openEditDialog(course);
                     }}
                   >
                     Edit
@@ -328,7 +457,7 @@ const InstructorDashboard = () => {
                           "linear-gradient(90deg, #4c51bf 60%, #5b6ee1 100%)",
                       },
                     }}
-                    onClick={() => openEnrollDialog(course)}
+                    onClick={() => openDeleteDialog(course)}
                   >
                     Remove
                   </Button>
@@ -339,24 +468,175 @@ const InstructorDashboard = () => {
         </Grid>
       </Container>
 
-      {/* Enroll Dialog */}
-      <Dialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-        TransitionComponent={Slide}
-      >
-        <DialogTitle>Confirm Enrollment</DialogTitle>
+      {/* Add Dialog */}
+      <Dialog open={addDialogOpen} onClose={() => setAddDialogOpen(false)}>
+        <DialogTitle
+          sx={{
+            color: "#5b6ee1",
+            textAlign: "center",
+            fontWeight: "bold",
+          }}
+        >
+          Add Course
+        </DialogTitle>
         <DialogContent>
-          Are you sure you want to enroll in{" "}
-          <strong>{selectedCourse?.title}</strong>?
+          <TextField
+            margin="dense"
+            label="Course Name"
+            name="name"
+            value={addForm.name}
+            onChange={handleAddChange}
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            label="Description"
+            name="description"
+            value={addForm.description}
+            onChange={handleAddChange}
+            fullWidth
+            multiline
+            minRows={2}
+          />
+          <TextField
+            margin="dense"
+            label="Content"
+            name="content"
+            value={addForm.content}
+            onChange={handleAddChange}
+            fullWidth
+            multiline
+            minRows={3}
+          />
+          <Typography
+            sx={{ mt: 2, mb: 1, fontWeight: 500, color: "primary.main" }}
+          >
+            Upload Course Image
+          </Typography>
+          <label
+            htmlFor="add-course-image"
+            style={{
+              display: "inline-block",
+              padding: "8px 20px",
+              background: "linear-gradient(90deg, #5b6ee1 60%, #7f9cf5 100%)",
+              color: "#fff",
+              borderRadius: "6px",
+              cursor: "pointer",
+              fontWeight: "bold",
+              fontSize: "1rem",
+              marginBottom: 8,
+              boxShadow: "0 2px 8px 0 rgba(91,110,225,0.13)",
+            }}
+          >
+            Choose Image
+            <input
+              id="add-course-image"
+              type="file"
+              accept="image/*"
+              onChange={handleImage}
+              style={{ display: "none" }}
+            />
+          </label>
+          {addImage && (
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              Selected: {addImage.name}
+            </Typography>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleEnroll} variant="contained">
-            Yes, Enroll
+          <Button onClick={() => setAddDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleAdd} variant="contained">
+            Add
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Edit Dialog */}
+      <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
+        <DialogTitle
+          sx={{
+            color: "#5b6ee1",
+            textAlign: "center",
+            fontWeight: "bold",
+          }}
+        >
+          Edit Course
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            margin="dense"
+            label="Course Name"
+            name="name"
+            value={editForm.name}
+            onChange={handleEditChange}
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            label="Description"
+            name="description"
+            value={editForm.description}
+            onChange={handleEditChange}
+            fullWidth
+            multiline
+            minRows={2}
+          />
+          <TextField
+            margin="dense"
+            label="Content"
+            name="content"
+            value={editForm.content}
+            onChange={handleEditChange}
+            fullWidth
+            multiline
+            minRows={3}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleEdit} variant="contained">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Delete Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+      >
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete{" "}
+          <strong>{selectedCourse?.title}</strong>?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>No</Button>
+          <Button onClick={handleDelete} variant="contained">
+            Yes, Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Footer */}
+      <Box
+        component="footer"
+        sx={{
+          mt: 8,
+          py: 1,
+          bgcolor: "primary.main",
+          color: "#fff",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h6" fontWeight="bold" sx={{ letterSpacing: 1 }}>
+          Edu Nova
+        </Typography>
+        <Typography variant="body2" sx={{ mt: 1, opacity: 0.8 }}>
+          Empowering students to learn and grow. &copy;{" "}
+          {new Date().getFullYear()} Edu Nova. All rights reserved.
+        </Typography>
+      </Box>
     </>
   );
 };
