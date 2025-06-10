@@ -90,13 +90,12 @@ npm run dev
 
 ## 🗃 Database Models
 
-### User
-  Include user details and role identifier, such as Student and Instructor
-```
+1. User
+  - Include user details and role identifier, such as Student and Instructor.
 
-### Course
-  Include course details, instructor ID, and enrolled student IDs as foreign keys
-```
+2. Course
+  - Include course details, instructor ID, and enrolled student IDs as foreign keys.
+
 
 
 Built with ❤️ using MERN Stack.
