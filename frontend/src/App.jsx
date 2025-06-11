@@ -7,6 +7,7 @@ import MyCourses from "./components/MyCourses";
 import CourseDetails from "./components/CourseDetails";
 import CourseStudents from "./components/CourseStudents";
 import ProtectedRoute from "./components/ProtectedRoute";
+import LandingPage from "./components/LandingPage";
 import "./App.css";
 
 function App() {
@@ -14,7 +15,8 @@ function App() {
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Register />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
 
         {/* Student Protected Routes */}
