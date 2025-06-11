@@ -1,6 +1,6 @@
 # 🎓 Edu Nova - Online Learning Platform
 
-A full-stack MERN (MongoDB, Express.js, React, Node.js) web application that allows students to enroll in courses and instructors to create and manage them. Integrated a chat recommendation feature with the OpenAI API to give course recommendations to students based on their preferences.
+A full-stack MERN (MongoDB, Express.js, React, Node.js) web application that allows students to enroll in IT-related courses and instructors to create and manage them. Integrated a chat recommendation feature with the OpenAI API to give course recommendations to students based on their preferences.
 
 ## 📦 Tech Stack
 
@@ -96,7 +96,15 @@ npm run dev
 2. Course
   - Include course details, instructor ID, and enrolled student IDs as foreign keys.
 
+---
 
+## 🤖 Chat Assistant Features
+
+### **Personalized Course Recommendations**
+- Show related courses according to user inputs.
+- Ex: "Hi, can you show me courses for software engineering?", "Are there any courses for web development?"
+
+---
 
 
 Built with ❤️ using MERN Stack.
