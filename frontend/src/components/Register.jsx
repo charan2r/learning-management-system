@@ -84,13 +84,13 @@ const Register = () => {
         message: "Registered successfully!",
         severity: "success",
       });
+      setTimeout(() => navigate("/login"), 1000);
     } catch (error) {
       setAlert({
         open: true,
         message: error.response?.data?.message || "Registration failed",
         severity: "error",
       });
-      setTimeout(() => navigate("/login"), 1000);
     }
   };
 
