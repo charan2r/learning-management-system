@@ -189,7 +189,10 @@ const Login = () => {
           <Box mt={2} textAlign="center">
             <Typography variant="body2" color="text.secondary">
               Don't have an account?{" "}
-              <a href="/" style={{ textDecoration: "none", color: "#1976d2" }}>
+              <a
+                href="/register"
+                style={{ textDecoration: "none", color: "#1976d2" }}
+              >
                 Register here
               </a>
             </Typography>
